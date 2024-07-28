@@ -1,0 +1,80 @@
+<?php
+require_once(drupal_get_path('module', 'rohan_maharjan_itonics_products') . '/includes/index_page_callback.inc');
+require_once(drupal_get_path('module', 'rohan_maharjan_itonics_products') . '/includes/view_callback.inc');
+require_once(drupal_get_path('module', 'rohan_maharjan_itonics_products') . '/includes/add_callback.inc');
+require_once(drupal_get_path('module', 'rohan_maharjan_itonics_products') . '/includes/edit_callback.inc');
+require_once(drupal_get_path('module', 'rohan_maharjan_itonics_products') . '/includes/delete_callback.inc');
+
+
+function rohan_maharjan_itonics_products_menu()
+{
+    $items['admin/itonics/products/add'] = array(
+        'title' => 'Itonics Products',
+        'description' => 'View Itonics Products.',
+        'page callback' => 'rohan_maharjan_itonics_products_block_view',
+        'access arguments' => array('access rohan_maharjan_itonics_products'),
+        'weight' => -14,
+    );
+
+    $items['admin/itonics/products/%/edit'] = array(
+        'title' => 'Itonics Products',
+        'description' => 'View Itonics Products.',
+        'page callback' => 'rohan_maharjan_itonics_products_edit_block_view',
+        'page argument' => array(3),
+        'access arguments' => array('access rohan_maharjan_itonics_products'),
+        'weight' => -14,
+    );
+
+    $items['admin/itonics/products/%/delete'] = array(
+        'title' => 'Itonics Products',
+        'description' => 'View Itonics Products.',
+        'page callback' => 'rohan_maharjan_itonics_products_delete',
+        'page argument' => array(3),
+        'access arguments' => array('access rohan_maharjan_itonics_products'),
+        'weight' => -14,
+    );
+
+    $items['admin/itonics/products'] = array(
+        'title' => 'Itonics Products',
+        'description' => 'View Itonics Products.',
+        'page callback' => 'rohan_maharjan_itonics_products_sort_with_pager_content',
+        'access arguments' => array('access rohan_maharjan_itonics_products'),
+        'weight' => -14,
+    );
+
+    $items['admin/itonics/products/%'] = array(
+        'title' => 'View Itonics Product',
+        'description' => 'View details of an Itonics Product.',
+        'page callback' => 'rohan_maharjan_itonics_products_view',
+        'page arguments' => array(3),
+        'access arguments' => array('access rohan_maharjan_itonics_products'),
+        'weight' => -14,
+    );
+    return $items;
+}
+
+function rohan_maharjan_itonics_products_permission()
+{
+    return array(
+        'access rohan_maharjan_itonics_products' => array(
+            'title' => t('View Itonics Products'),
+            'description' => t(
+                'Customizing the Itonics Products requires the !permission-name permission.',
+                array(
+                    '!permission-name' => l(t('Administer blocks'), 'admin/people/permissions', array('fragment' => 'module-block')),
+                )
+            ),
+        ),
+    );
+}
+
+function rohan_maharjan_itonics_products_init() {
+    // Remove previous jQuery if necessary, to avoid conflicts
+    drupal_add_js('https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.4/jquery.min.js', array('type' => 'external', 'scope' => 'header'));
+
+    // Include Select2 CSS from CDN
+    drupal_add_css('https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css', array('type' => 'external'));
+
+    // Include Select2 JS from CDN after jQuery is included
+    drupal_add_js('https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js', array('type' => 'external', 'scope' => 'footer'));
+}

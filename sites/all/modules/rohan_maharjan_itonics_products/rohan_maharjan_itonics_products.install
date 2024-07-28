@@ -1,0 +1,23 @@
+<?php
+/**
+ * Implements hook_schema().
+ */
+function rohan_maharjan_itonics_products_install() {
+    // Define the SQL query to create the table.
+    $query = "
+        CREATE TABLE IF NOT EXISTS {rohan_maharjan_itonics_products} (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            title VARCHAR(255) NOT NULL,
+            image VARCHAR(255) DEFAULT NULL,
+            summary TEXT,
+            description TEXT,
+            category TEXT,
+            type VARCHAR(255) NOT NULL,
+            owner_email VARCHAR(255) NOT NULL,
+            expiry_date DATETIME DEFAULT NULL
+        );
+    ";
+
+    // Execute the query.
+    db_query($query);
+}

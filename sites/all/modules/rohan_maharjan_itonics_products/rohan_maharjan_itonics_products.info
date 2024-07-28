@@ -1,0 +1,9 @@
+name = Rohan Maharjan ITONICS Products
+description = "A custom module to manage ITONICS products"
+core = 7.x
+package = "Custom Module"
+configure = admin/itonics/products
+
+version = "7.x-2.0"
+core = "7.x"
+project = "rohan_maharjan_itonics_products"

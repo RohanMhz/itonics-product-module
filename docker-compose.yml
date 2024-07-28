@@ -1,0 +1,52 @@
+version: '3.8'
+
+services:
+  drupal:
+    image: drupal:7
+    container_name: drupal
+    ports:
+      - "8090:80"
+    volumes:
+      - drupal_data:/var/www/html
+    depends_on:
+      - php
+      - db
+    environment:
+      - DRUPAL_DB_HOST=mysql
+      - DRUPAL_DB_NAME=itonics-db
+      - DRUPAL_DB_USER=root
+      - DRUPAL_DB_PASSWORD=rootpassword
+
+  php:
+    image: php:7.4-fpm
+    container_name: php
+    volumes:
+      - drupal_data:/var/www/html
+
+  db:
+    image: mysql:5.7
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: itonics-db
+      MYSQL_USER: root
+      MYSQL_PASSWORD: root
+    volumes:
+      - db_data:/var/lib/mysql
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    ports:
+      - "8091:80"
+    environment:
+      PMA_HOST: db
+      PMA_USER: root
+      PMA_PASSWORD: root
+      PMA_PORT: 3306
+    depends_on:
+      - db
+
+volumes:
+  drupal_data:
+    driver: local
+  mysql_data:
+    driver: local

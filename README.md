@@ -1,1 +1,1 @@
-# itonics-product-module
+# itonics-module
