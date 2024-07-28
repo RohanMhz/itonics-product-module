@@ -67,14 +67,3 @@ function rohan_maharjan_itonics_products_permission()
         ),
     );
 }
-
-function rohan_maharjan_itonics_products_init() {
-    // Remove previous jQuery if necessary, to avoid conflicts
-    drupal_add_js('https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.4/jquery.min.js', array('type' => 'external', 'scope' => 'header'));
-
-    // Include Select2 CSS from CDN
-    drupal_add_css('https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css', array('type' => 'external'));
-
-    // Include Select2 JS from CDN after jQuery is included
-    drupal_add_js('https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js', array('type' => 'external', 'scope' => 'footer'));
-}
