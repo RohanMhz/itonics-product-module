@@ -67,3 +67,22 @@ function rohan_maharjan_itonics_products_permission()
         ),
     );
 }
+
+function rohan_maharjan_itonics_products_form_alter(&$form, &$form_state, $form_id) {
+    // Check if the form ID matches.
+    // if ($form_id == 'rohan_maharjan_itonics_products_form') {
+      // Add jQuery Multiselect CSS and JS files.
+    //   drupal_add_js('https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0/jquery.min.js', 'external');
+      drupal_add_css(drupal_get_path('module', 'rohan_maharjan_itonics_products') . '/../../libraries/multi-select/css/multi-select.css');
+      drupal_add_js(drupal_get_path('module', 'rohan_maharjan_itonics_products') . '/../../libraries/multi-select/js/jquery.multi-select.js');
+      drupal_add_js(drupal_get_path('module', 'rohan_maharjan_itonics_products') . '/../../libraries/custom.js');
+  
+    //   // Add custom JS to initialize the multiselect.
+    //   $form['#attached']['js'][] = array(
+    //     'type' => 'inline',
+    //     'data' => 'jQuery(document).ready(function() {
+    //       jQuery("#select-categories").multiSelect();
+    //     });',
+    //   );
+    // }
+  }

@@ -5,6 +5,7 @@ function rohan_maharjan_itonics_products_edit_form($form, &$form_state)
     $id = arg(3);
     $result = db_query('SELECT * FROM {rohan_maharjan_itonics_products} WHERE id = :tid', array(':tid' => $id));
     $record = $result->fetchObject();
+    $form_state['record'] = $record;
 
     $form['title'] = array(
         '#type' => 'textfield',
@@ -21,7 +22,7 @@ function rohan_maharjan_itonics_products_edit_form($form, &$form_state)
         '#type' => 'managed_file',
         '#title' => t('Image'),
         '#description' => t('Upload a Image.'),
-        '#upload_location' => 'public://rohan_maharjan_itonics_products/',
+        '#upload_location' => 'public://products/',
         '#weight' => 1,
     );
 
@@ -41,14 +42,6 @@ function rohan_maharjan_itonics_products_edit_form($form, &$form_state)
             '#prefix' => '<div id="current-image">',
             '#suffix' => '</div>',
             '#weight' => 2,
-        );
-
-        $form['delete_image'] = array(
-            '#type' => 'checkbox',
-            '#title' => t('Delete Current Image'),
-            '#default_value' => FALSE,
-            '#description' => t('Check this box if you want to delete the current image.'),
-            '#weight' => 3,
         );
     }
 
@@ -82,6 +75,7 @@ function rohan_maharjan_itonics_products_edit_form($form, &$form_state)
         '#required' => TRUE,
         '#description' => t('Select one or more categories for the ITONICS Product.'),
         '#weight' => 6,
+        '#id' => 'select-categories',
     );
 
     $form['type'] = array(
@@ -113,7 +107,7 @@ function rohan_maharjan_itonics_products_edit_form($form, &$form_state)
         '#required' => TRUE,
         '#description' => t('Select the expiry date of the ITONICS Product.'),
         '#weight' => 9,
-        '#title_display' => 'invisible', // This hides the suffix ' Date' from the label.
+        '#title_display' => 'invisible',
     );
 
     $form['id'] = array(
@@ -135,7 +129,8 @@ function rohan_maharjan_itonics_products_edit_form($form, &$form_state)
 
 function rohan_maharjan_itonics_products_edit_submit_handler($form, &$form_state)
 {
-    edit_products_validate($form, $form_state);
+    $record = $form_state['record'];
+    edit_products_validate($form_state);
 
     if (empty($form_state['errors'])) {
         $id = $form_state['values']['id'];
@@ -157,57 +152,8 @@ function rohan_maharjan_itonics_products_edit_submit_handler($form, &$form_state
             'expiry_date' => $expiry_date,
         );
 
-        if (!empty($form['image'])) {
-            $file = file_save_upload(
-                'image',
-                array(
-                    'file_validate_is_image' => array(), 
-                    'file_validate_extensions' => array('jpg jpeg png'), 
-                )
-            );
-
-            if ($file) {
-                if ($file = file_move($file, 'public://products/')) {
-                    $data['image'] = $file->fid;
-
-                    if (!empty($form_state['values']['delete_image'])) {
-                        file_delete(file_load($record->image));
-                        $data['image'] = NULL; 
-                    }
-                }
-            }
-        }
-        if (!empty($form_state['values']['image'])) {
-            $file = file_save_upload(
-                'image',
-                array(
-                    'file_validate_is_image' => array(), 
-                    'file_validate_extensions' => array('jpg jpeg png'), 
-                )
-            );
-
-            if ($file) {
-                if ($file = file_move($file, 'public://products/')) {
-                    $data['image'] = $file->fid;
-
-                    if (!empty($form_state['values']['delete_image'])) {
-                        $result = db_query('SELECT image FROM {rohan_maharjan_itonics_products} WHERE id = :id', array(':id' => $id));
-                        $record = $result->fetchObject();
-                        if ($record && isset($record->image)) {
-                            file_delete(file_load($record->image));
-                            $data['image'] = NULL;
-                        }
-                    }
-                }
-            }
-        } elseif (!empty($form_state['values']['delete_image'])) {
-            $result = db_query('SELECT image FROM {rohan_maharjan_itonics_products} WHERE id = :id', array(':id' => $id));
-            $record = $result->fetchObject();
-            if ($record && isset($record->image)) {
-                file_delete(file_load($record->image));
-                $data['image'] = NULL;
-            }
-        }
+        $data['image'] = handle_image_upload($form_state, $id);
+        
         db_update('rohan_maharjan_itonics_products')
             ->fields($data)
             ->condition('id', $id)
@@ -232,7 +178,7 @@ function rohan_maharjan_itonics_products_edit_block_view()
     return $block;
 }
 
-function edit_products_validate($form, &$form_state) {
+function edit_products_validate(&$form_state) {
     // Initialize an array to hold error messages
     $errors = array();
 

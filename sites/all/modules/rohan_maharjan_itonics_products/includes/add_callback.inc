@@ -27,7 +27,7 @@ function rohan_maharjan_itonics_products_form($form, &$form_state)
     $form['image'] = array(
         '#type' => 'managed_file',
         '#title' => t('Image'),
-        '#upload_location' => 'public://rohan_maharjan_itonics_products/',
+        '#upload_location' => 'public://products/',
         '#weight' => 1,
     );
     $form['summary'] = array(
@@ -53,14 +53,15 @@ function rohan_maharjan_itonics_products_form($form, &$form_state)
         '#required' => TRUE,
         '#description' => t('Select one or more categories for the ITONICS Product.'),
         '#weight' => 4,
-        '#attributes' => array(
-            'class' => array('rohan-maharjan-itonics-products-category-select'), 
-        ),
-        '#attached' => array(
-            'js' => array(
-                // drupal_get_path('module', 'rohan_maharjan_itonics_products') . '/select2-init.js',
-            ),
-        ),
+        '#id' => 'select-categories',
+        // '#attributes' => array(
+        //     'class' => array('rohan-maharjan-itonics-products-category-select'), 
+        // ),
+        // '#attached' => array(
+        //     'js' => array(
+        //         // drupal_get_path('module', 'rohan_maharjan_itonics_products') . '/select2-init.js',
+        //     ),
+        // ),
     );
     $form['type'] = array(
         '#type' => 'radios',

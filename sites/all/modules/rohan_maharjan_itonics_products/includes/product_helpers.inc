@@ -35,7 +35,7 @@ function handle_image_upload($form_state, $id = NULL, $directory = 'public://pro
     $file = file_save_upload(
         'image',
         array(
-            'file_validate_is_image' => array(), 
+            'file_validate_is_image' => array(),
             'file_validate_extensions' => array('jpg jpeg png'),
         )
     );
@@ -46,12 +46,15 @@ function handle_image_upload($form_state, $id = NULL, $directory = 'public://pro
         if ($file) {
             $fid = $file->fid;
 
-            if ($id && !empty($form_state['values']['delete_image'])) {
+            if ($id) {
                 $result = db_query('SELECT image FROM {rohan_maharjan_itonics_products} WHERE id = :id', array(':id' => $id));
                 $record = $result->fetchObject();
-                
+
                 if ($record && isset($record->image)) {
-                    file_delete(file_load($record->image));
+                    $old_file = file_load($record->image);
+                    if ($old_file) {
+                        file_delete($old_file);
+                    }
                 }
             }
 
