@@ -51,12 +51,3 @@ The Rohan Maharjan ITONICS Products module is a custom module designed to manage
 
 ## Support
 For any issues or feature requests, please open an issue in the module's issue queue on the repository.
-
-## License
-This module is released under the [GNU General Public License](https://www.gnu.org/licenses/gpl-2.0.html).
-
-## Contributing
-Contributions are welcome! Please fork the repository and submit a pull request for any improvements or bug fixes.
-
-## Acknowledgments
-Thanks to the Drupal community for their support and resources.
